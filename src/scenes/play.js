@@ -5,10 +5,12 @@ class Play extends Phaser.Scene {
 
     preload() {
         this.load.image('field', 'assets/field.png');
+        this.load.image('runner', 'assets/runningback.png');
     }
 
     create() {
         this.scrollingField = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'field').setOrigin(0, 0);
+        this.testSprite = this.add.tileSprite(game.config.width / 2, game.config.height/2, 0, 0, 'runner').setOrigin(0.5, 1);
         this.speed = game.config.height;
     }
 
