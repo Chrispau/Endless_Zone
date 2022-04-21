@@ -19,6 +19,10 @@ class Play extends Phaser.Scene {
         this.player = this.physics.add.sprite(game.config.width / 2, game.config.height/2, 'runner').setOrigin(0.5, 1);
         this.player.setCollideWorldBounds(true);
     
+        this.testSprite = this.add.tileSprite(game.config.width / 2, game.config.height/2, 0, 0, 'runner').setOrigin(0.5, 1);
+        this.speed = game.config.height;
+        this.centerDistance = 0;
+        this.lastYardline = 0;
     }
 
 
@@ -39,5 +43,8 @@ class Play extends Phaser.Scene {
             this.player.setVelocityY(this.PLAYER_VELOCITY);
         }
     
+        this.scrollingField.tilePositionY -= this.speed * (delta / 1000); // normalize scroll speed to pixels per second
+        this.centerDistance += (this.speed * (delta / 1000)) / 80; // total distance the screen has scrolled so far, in yards
+        
     }
 }
