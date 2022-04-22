@@ -9,15 +9,19 @@ class Play extends Phaser.Scene {
     }
 
     create() {
-        this.scrollingField = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'field').setOrigin(0, 0);
-        this.PLAYER_VELOCITY = 400
+        this.scrollingField = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'field')
+            .setOrigin(0, 0);
+        this.PLAYER_VELOCITY = game.config.height / 2
         this.scrollSpeed = game.config.height;
 
         // create simple cursor input
         cursors = this.input.keyboard.createCursorKeys();
 
         // pysics sprite
-        this.player = this.physics.add.sprite(game.config.width / 2, game.config.height/2, 'runner').setOrigin(0.5, 1);
+        this.player = this.physics.add.sprite(game.config.width / 2, game.config.height/2, 'runner')
+            .setOrigin(0.5, 1)
+            .setScale(game.config.width / 800, game.config.height / 800); 
+            // scale sprite such that it is always the same relative to screen size
         this.player.setCollideWorldBounds(true);
     
         this.centerDistance = 0;
