@@ -1,5 +1,6 @@
 // Endless Zone
 let cursors;
+let keyJ;
 
 const config = {
     type: Phaser.CANVAS,
