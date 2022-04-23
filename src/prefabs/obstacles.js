@@ -4,8 +4,9 @@ class Defender extends Phaser.GameObjects.Sprite {
         this.worldScene = scene;
         this.speed = speed;
         this.multiplier = multiplier;
-        scene.physics.add.existing(this)
-            .setScale(game.config.width / 600, game.config.height / 600);
+        scene.physics.add.existing(this);
+        this.displayWidth = game.config.width * (2 / 15);
+        this.displayHeight = game.config.height * (4 / 15);
     }
 
     update(time, delta) {

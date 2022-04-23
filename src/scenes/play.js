@@ -4,16 +4,17 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('field', 'assets/field.png');
+        this.load.image('field', 'assets/field600.png');
         this.load.image('gg', 'assets/gameover.png');
-        this.load.image('runner', 'assets/runningback.png');
+        this.load.image('runner', 'assets/player_sprite.png');
         this.load.image('defender', 'assets/defender.png');
         this.load.image('fans', 'assets/fans.png');
     }
 
     create() {
-        this.scrollingField = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'field')
+        this.scrollingField = this.add.tileSprite(0, 0, 0, 0, 'field')
             .setOrigin(0, 0);
+            
         this.PLAYER_VELOCITY = game.config.height / 2
         this.scrollSpeed = game.config.height;
 
@@ -28,6 +29,9 @@ class Play extends Phaser.Scene {
             .setOrigin(0.5, 1)
             .setScale(game.config.width / 800, game.config.height / 800);
         // scale sprite such that it is always the same relative to screen size
+        this.player.displayWidth = game.config.width / 10;
+        this.player.displayHeight = game.config.height / 5;
+        
         this.player.setCollideWorldBounds(true);
 
         this.centerDistance = 0;
