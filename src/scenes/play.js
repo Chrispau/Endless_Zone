@@ -61,7 +61,13 @@ class Play extends Phaser.Scene {
         this.p1Score = 0;
         this.scoreLeft = this.add.text(0, 0, 'SCORE: ' + this.p1Score, scoreConfig);
 
-        this.obstacleSpawnDelay = 3000; // initial time between obstacles appearing in ms
+
+        // scale difficulty through multiple waves based on distance traveled
+        this.wave = 0;
+        this.obstacleSpeed = 200;    // obstacles start at 200
+        this.obstacleSpeedMultiplier = 1;     
+        this.nextWaveThreshold = 100; // starting at 100 yards
+        this.obstacleSpawnDelay = 4000; // initial time between obstacles appearing in ms
         this.obstacleSpawnTimer = this.obstacleSpawnDelay;
     }
 
@@ -79,17 +85,30 @@ class Play extends Phaser.Scene {
             this.centerDistance += (this.scrollSpeed * (delta / 1000) / (game.config.height / 10)); // total distance the screen has scrolled so far, in yards
             //console.log(this.centerDistance);
 
+            // increasing challenge
+            if (this.centerDistance > this.nextWaveThreshold) {
+                this.wave++
+                this.nextWaveThreshold += 100;
+                console.log(this.nextWaveThreshold);
+                this.obstacleSpawnDelay *= 0.95;
+                this.obstacleSpeedMultiplier += 0.1
+                //console.log(this.obstacleSpeedMultiplier);
+                // obstacles appear a little more frequently and move a little faster
+
+            }
+
             //obstacle spawning
             this.obstacleSpawnTimer -= delta;
             if (this.obstacleSpawnTimer <= 0) {
                 this.obstacleSpawnTimer = this.obstacleSpawnDelay;
-                this.spawnDefender(300);
+                this.spawnDefender(this.obstacleSpeed, this.obstacleSpeedMultiplier);
             }
 
             //score display
             this.p1Score = Math.floor(this.centerDistance);
             this.scoreLeft.text = 'SCORE: ' + this.p1Score + " YARDS";
 
+            // polling controls
             if (cursors.left.isDown) {
                 this.player.setVelocityX(-this.PLAYER_VELOCITY);
             } else if (cursors.right.isDown) {
@@ -102,22 +121,25 @@ class Play extends Phaser.Scene {
             }
 
             if (Phaser.Input.Keyboard.JustDown(keyJ)) {
-                this.spawnDefender(300);
+                this.spawnDefender(this.obstacleSpeed, this.obstacleSpeedMultiplier);
             }
-        }
-        //game over display
-        let gameoverConfig = {
-            fontFamily: 'Stencil Std, fantasy',
-            fontSize: '100px',
-            color: '#FFFFFF',
-            align: 'right',
-            padding: {
-                top: 5,
-                bottom: 5,
-            },
+
+
         }
 
         if (this.gameOver) {
+            //game over display
+            let gameoverConfig = {
+                fontFamily: 'Stencil Std, fantasy',
+                fontSize: '100px',
+                color: '#FFFFFF',
+                align: 'right',
+                padding: {
+                    top: 5,
+                    bottom: 5,
+                },
+            }
+
             this.gameoverScreen = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'gg').setOrigin(0, 0);
             this.add.text(game.config.width / 2, game.config.height / 6, 'GAME OVER', gameoverConfig).setOrigin(0.5);
             gameoverConfig.fontSize = '80px';
@@ -133,7 +155,7 @@ class Play extends Phaser.Scene {
 
 
     // put a defender on the screen with given horizontal speed coming from a random side of the screen
-    spawnDefender(speed) {
+    spawnDefender(speed, multiplier) {
         let startingX, direction;
         if (Math.random() >= 0.5) {
             startingX = -10;
@@ -142,8 +164,8 @@ class Play extends Phaser.Scene {
             startingX = game.config.width + 10;
             direction = -1;
         }
-        let startingY = randomRange(-game.config.height / 2, game.config.height / 2);
-        this.defenders.add(new Defender(this, startingX, startingY, 'defender', 0, speed * direction), true); //second arg must be true to add object to display list i guess
+        let startingY = randomRange(-game.config.height / 3, game.config.height / 3);
+        this.defenders.add(new Defender(this, startingX, startingY, 'defender', 0, speed * direction, multiplier), true); //second arg must be true to add object to display list i guess
     }
     setGameOver() {
         this.gameOver = true;
