@@ -8,6 +8,7 @@ class Play extends Phaser.Scene {
         this.load.image('gg', 'assets/gameover.png');
         this.load.image('runner', 'assets/runningback.png');
         this.load.image('defender', 'assets/defender.png');
+        this.load.image('fans', 'assets/fans.png');
     }
 
     create() {
@@ -30,13 +31,13 @@ class Play extends Phaser.Scene {
         this.player.setCollideWorldBounds(true);
 
         this.centerDistance = 0;
-        this.defenders = this.physics.add.group({
+        this.obstacles = this.physics.add.group({
             runChildUpdate: true
         });
 
         //this.physics.add.collider(this.player, this.defenders);
 
-        this.physics.add.overlap(this.player, this.defenders, this.setGameOver, null, this);
+        this.physics.add.overlap(this.player, this.obstacles, this.setGameOver, null, this);
         //this.lastYardline = 0;
 
         //set game over initially to false
@@ -61,10 +62,12 @@ class Play extends Phaser.Scene {
         this.p1Score = 0;
         this.scoreLeft = this.add.text(0, 0, 'SCORE: ' + this.p1Score, scoreConfig);
 
+        // this.obstacleSpawners = [this.spawnDefender, this.spawnFans];
 
         // scale difficulty through multiple waves based on distance traveled
+        // wavse dont do anything yet
         this.wave = 0;
-        this.obstacleSpeed = 200;    // obstacles start at 200
+        this.obstacleSpeed = 300;    // defenders start at 300
         this.obstacleSpeedMultiplier = 1;     
         this.nextWaveThreshold = 100; // starting at 100 yards
         this.obstacleSpawnDelay = 4000; // initial time between obstacles appearing in ms
@@ -74,8 +77,6 @@ class Play extends Phaser.Scene {
 
 
     update(time, delta) {
-
-
         this.player.setVelocity(0);
 
         if (!this.gameOver) {
@@ -89,10 +90,10 @@ class Play extends Phaser.Scene {
             if (this.centerDistance > this.nextWaveThreshold) {
                 this.wave++
                 this.nextWaveThreshold += 100;
-                console.log(this.nextWaveThreshold);
+                //console.log(this.nextWaveThreshold);
                 this.obstacleSpawnDelay *= 0.95;
                 this.obstacleSpeedMultiplier += 0.1
-                //console.log(this.obstacleSpeedMultiplier);
+                console.log(this.obstacleSpeedMultiplier);
                 // obstacles appear a little more frequently and move a little faster
 
             }
@@ -101,7 +102,18 @@ class Play extends Phaser.Scene {
             this.obstacleSpawnTimer -= delta;
             if (this.obstacleSpawnTimer <= 0) {
                 this.obstacleSpawnTimer = this.obstacleSpawnDelay;
-                this.spawnDefender(this.obstacleSpeed, this.obstacleSpeedMultiplier);
+                switch(randomInt(2)){
+                    case 0:
+                        this.spawnDefender(this.obstacleSpeedMultiplier);
+                        break;
+                    case 1:
+                        this.spawnFans(this.obstacleSpeedMultiplier);
+                        break;
+                    default:
+                        break;
+                }
+                
+                //this.spawnDefender(this.obstacleSpeed, this.obstacleSpeedMultiplier);
             }
 
             //score display
@@ -121,7 +133,7 @@ class Play extends Phaser.Scene {
             }
 
             if (Phaser.Input.Keyboard.JustDown(keyJ)) {
-                this.spawnDefender(this.obstacleSpeed, this.obstacleSpeedMultiplier);
+                this.obstacles.add(new Fans(this, 0, 0, 'fans', 0, 300, 1), true);
             }
 
 
@@ -155,18 +167,18 @@ class Play extends Phaser.Scene {
 
 
     // put a defender on the screen with given horizontal speed coming from a random side of the screen
-    spawnDefender(speed, multiplier) {
-        let startingX, direction;
-        if (Math.random() >= 0.5) {
-            startingX = -10;
-            direction = 1;
-        } else {
-            startingX = game.config.width + 10;
-            direction = -1;
-        }
+    spawnDefender(multiplier) {
+        let [startingX, direction] = randomSide();
         let startingY = randomRange(-game.config.height / 3, game.config.height / 3);
-        this.defenders.add(new Defender(this, startingX, startingY, 'defender', 0, speed * direction, multiplier), true); //second arg must be true to add object to display list i guess
+        //second arg must be true to add object to display list i guess
+        this.obstacles.add(new Defender(this, startingX, startingY, 'defender', 0, this.obstacleSpeed * direction, multiplier), true); 
     }
+
+    spawnFans(multiplier) {
+        let [startingX, direction] = randomSide();
+        this.obstacles.add(new Fans(this, startingX, 0, 'fans', 0, this.obstacleSpeed * direction, multiplier), true);
+    }
+
     setGameOver() {
         this.gameOver = true;
 
@@ -176,9 +188,22 @@ class Play extends Phaser.Scene {
 
 }
 
+// return the data needed to place and orient an obstacle on one side of the screen or the other
+function randomSide(){
+    if (Math.random() >= 0.5) {
+        return [-10, 1];
+    } else {
+        return [game.config.width + 10, -1];
+    }
+}
+
 // get a random value in the range (works for negatives)
 function randomRange(min, max) {
     let range = max - min;
     let val = Math.random() * range
     return val + min;
+}
+
+function randomInt(max){
+    return Math.floor(Math.random() * max)
 }
