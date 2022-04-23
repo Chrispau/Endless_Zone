@@ -9,6 +9,7 @@ class Play extends Phaser.Scene {
         this.load.image('runner', 'assets/player_sprite.png');
         this.load.image('defender', 'assets/defender.png');
         this.load.image('fans', 'assets/fans.png');
+        this.load.image('trash', 'assets/trash.png');
     }
 
     create() {
@@ -31,7 +32,7 @@ class Play extends Phaser.Scene {
         // scale sprite such that it is always the same relative to screen size
         this.player.displayWidth = game.config.width / 10;
         this.player.displayHeight = game.config.height / 5;
-        
+
         this.player.setCollideWorldBounds(true);
 
         this.centerDistance = 0;
@@ -106,12 +107,15 @@ class Play extends Phaser.Scene {
             this.obstacleSpawnTimer -= delta;
             if (this.obstacleSpawnTimer <= 0) {
                 this.obstacleSpawnTimer = this.obstacleSpawnDelay;
-                switch(randomInt(2)){
+                switch(randomInt(3)){
                     case 0:
                         this.spawnDefender(this.obstacleSpeedMultiplier);
                         break;
                     case 1:
                         this.spawnFans(this.obstacleSpeedMultiplier);
+                        break;
+                    case 2:
+                        this.spawnTrash();
                         break;
                     default:
                         break;
@@ -137,7 +141,7 @@ class Play extends Phaser.Scene {
             }
 
             if (Phaser.Input.Keyboard.JustDown(keyJ)) {
-                this.obstacles.add(new Fans(this, 0, 0, 'fans', 0, 300, 1), true);
+                this.spawnTrash();
             }
 
 
@@ -181,6 +185,12 @@ class Play extends Phaser.Scene {
     spawnFans(multiplier) {
         let [startingX, direction] = randomSide();
         this.obstacles.add(new Fans(this, startingX, 0, 'fans', 0, this.obstacleSpeed * direction, multiplier), true);
+    }
+
+    spawnTrash() {
+        // trash will spawn at the top at a random x around the player's x position
+        let startingX = randomRange(this.player.x - (game.config.width / 5), this.player.x + (game.config.width / 5))
+        this.obstacles.add(new Trash(this, startingX, 0, 'trash', 0), true);
     }
 
     setGameOver() {
