@@ -5,6 +5,7 @@ class Play extends Phaser.Scene {
 
     preload() {
         this.load.image('field', 'assets/field.png');
+        this.load.image('gg', 'assets/gameover.png');
         this.load.image('runner', 'assets/runningback.png');
         this.load.image('defender', 'assets/defender.png');
     }
@@ -19,6 +20,7 @@ class Play extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
         // extra key for debug stuff
         keyJ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J);
+        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
         // physics sprite
         this.player = this.physics.add.sprite(game.config.width / 2, game.config.height/2, 'runner')
@@ -36,6 +38,26 @@ class Play extends Phaser.Scene {
 
         this.physics.add.overlap(this.player, this.defenders, this.setGameOver, null, this);
         //this.lastYardline = 0;
+
+        //set game over initially to false
+        this.gameOver = false;
+
+        this.p1Score = 0;
+
+        // display score
+        let scoreConfig = {
+            fontFamily: 'Stencil Std, fantasy',
+            fontSize: '56px',
+            backgroundColor: '#013220',
+            color: '#FFFFFF',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+        }
+        this.p1Score = 0; 
+        this.scoreLeft = this.add.text(0, 0, 'SCORE: ' + this.p1Score, scoreConfig);
     }
 
 
@@ -62,7 +84,34 @@ class Play extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyJ)) {
             this.spawnDefender(300);
         }
-        this.gameOver = false;
+        
+        if(!this.gameOver){
+            this.p1Score = Math.floor(this.centerDistance);
+            this.scoreLeft.text = 'SCORE: ' + this.p1Score + " YARDS";
+        }
+        let gameoverConfig = {
+            fontFamily: 'Stencil Std, fantasy',
+            fontSize: '100px',
+            color: '#FFFFFF',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+        }
+ 
+       if(this.gameOver){
+            this.gameoverScreen = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'gg').setOrigin(0, 0);
+            this.add.text(game.config.width/2, game.config.height/6, 'GAME OVER', gameoverConfig).setOrigin(0.5);
+            gameoverConfig.fontSize = '80px';
+            this.add.text(game.config.width/2, game.config.height/2, 'SCORE: ' + this.p1Score + ' YARDS', gameoverConfig).setOrigin(0.5);
+            gameoverConfig.fontSize = '45px';
+            this.add.text(game.config.width/2, game.config.height - 100, 'Press (R) to Restart', gameoverConfig).setOrigin(0.5);
+        }
+
+        if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+            this.scene.restart();
+        }
     }
 
 

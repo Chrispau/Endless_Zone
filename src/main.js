@@ -1,6 +1,6 @@
 // Endless Zone
 let cursors;
-let keyJ;
+let keyJ, keySPACE, keyK, keyR;
 
 const config = {
     type: Phaser.CANVAS,
@@ -12,7 +12,7 @@ const config = {
             debug: true,
         }
     },
-    scene: [Play]
+    scene: [Menu, Play]
 }
 
 let game = new Phaser.Game(config);
