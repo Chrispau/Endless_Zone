@@ -85,10 +85,12 @@ class Play extends Phaser.Scene {
             this.spawnDefender(300);
         }
         
+        //score display
         if(!this.gameOver){
             this.p1Score = Math.floor(this.centerDistance);
             this.scoreLeft.text = 'SCORE: ' + this.p1Score + " YARDS";
         }
+        //game over display
         let gameoverConfig = {
             fontFamily: 'Stencil Std, fantasy',
             fontSize: '100px',
