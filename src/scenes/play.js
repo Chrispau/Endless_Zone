@@ -10,6 +10,10 @@ class Play extends Phaser.Scene {
         this.load.image('defender', 'assets/defender.png');
         this.load.image('fans', 'assets/fans.png');
         this.load.image('trash', 'assets/trash.png');
+
+        this.load.audio('startup', 'assets/up.mp3');
+        this.load.audio('oof', 'assets/oof.mp3');
+        this.load.audio('down', 'assets/down.mp3')
     }
 
     create() {
@@ -77,14 +81,16 @@ class Play extends Phaser.Scene {
         this.nextWaveThreshold = 100; // starting at 100 yards
         this.obstacleSpawnDelay = 4000; // initial time between obstacles appearing in ms
         this.obstacleSpawnTimer = this.obstacleSpawnDelay;
+        this.sound.play('startup');
     }
 
 
 
     update(time, delta) {
-        this.player.setVelocity(0);
+        
 
         if (!this.gameOver) {
+            this.player.setVelocity(0);
 
             // starting speed is 10yards/s, or 1 screen length
             this.scrollingField.tilePositionY -= this.scrollSpeed * (delta / 1000); // normalize scroll speed to pixels per second
@@ -194,8 +200,10 @@ class Play extends Phaser.Scene {
     }
 
     setGameOver() {
+        this.sound.play('oof');
         this.gameOver = true;
-
+        // destroy the player to prevent repeated calls to this function
+        this.player.destroy();
         console.log('game over');
     }
 
