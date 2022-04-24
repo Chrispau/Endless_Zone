@@ -147,7 +147,7 @@ class Play extends Phaser.Scene {
             }
 
             if (Phaser.Input.Keyboard.JustDown(keyJ)) {
-                this.spawnTrash();
+                // this.spawnDefender(this.obstacleSpeedMultiplier);
             }
 
 
@@ -183,19 +183,24 @@ class Play extends Phaser.Scene {
     // put a defender on the screen with given horizontal speed coming from a random side of the screen
     spawnDefender(multiplier) {
         let [startingX, direction] = randomSide();
-        let startingY = randomRange(-game.config.height / 3, game.config.height / 3);
+        // math to find the right starting y to actually target the player -- does not work right now
+        //let v = Math.sqrt(Math.pow(this.scrollSpeed * multiplier, 2) + Math.pow(this.obstacleSpeed * multiplier, 2))
+        // let b = Math.sqrt(Math.pow(this.player.x, 2) - Math.pow(v, 2))
+        //let startingY = this.player.y - b
+        let startingY = randomRange(- (game.config.height / 5), game.config.height / 5);
         //second arg must be true to add object to display list i guess
         this.obstacles.add(new Defender(this, startingX, startingY, 'defender', 0, this.obstacleSpeed * direction, multiplier), true); 
     }
 
     spawnFans(multiplier) {
         let [startingX, direction] = randomSide();
+        let startingY = randomRange(- (game.config.height / 5), game.config.height / 5);
         this.obstacles.add(new Fans(this, startingX, 0, 'fans', 0, this.obstacleSpeed * direction, multiplier), true);
     }
 
     spawnTrash() {
-        // trash will spawn at the top at a random x around the player's x position
-        let startingX = randomRange(this.player.x - (game.config.width / 5), this.player.x + (game.config.width / 5))
+        // trash will spawn at the top at the player's x position
+        let startingX = randomRange(this.player.x - (game.config.width / 5), this.player.x + (game.config.width / 5));
         this.obstacles.add(new Trash(this, startingX, 0, 'trash', 0), true);
     }
 
