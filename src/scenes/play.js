@@ -47,7 +47,6 @@ class Play extends Phaser.Scene {
         //this.physics.add.collider(this.player, this.defenders);
 
         this.physics.add.overlap(this.player, this.obstacles, this.setGameOver, null, this);
-        //this.lastYardline = 0;
 
         //set game over initially to false
         this.gameOver = false;
@@ -71,7 +70,6 @@ class Play extends Phaser.Scene {
         this.p1Score = 0;
         this.scoreLeft = this.add.text(0, 0, 'SCORE: ' + this.p1Score, scoreConfig);
 
-        // this.obstacleSpawners = [this.spawnDefender, this.spawnFans];
 
         // scale difficulty through multiple waves based on distance traveled
         // wavse dont do anything yet
@@ -87,7 +85,6 @@ class Play extends Phaser.Scene {
 
 
     update(time, delta) {
-        
 
         if (!this.gameOver) {
             this.player.setVelocity(0);
@@ -104,7 +101,7 @@ class Play extends Phaser.Scene {
                 //console.log(this.nextWaveThreshold);
                 this.obstacleSpawnDelay *= 0.95;
                 this.obstacleSpeedMultiplier += 0.1
-                console.log(this.obstacleSpeedMultiplier);
+                //console.log(this.obstacleSpeedMultiplier);
                 // obstacles appear a little more frequently and move a little faster
 
             }
@@ -127,7 +124,6 @@ class Play extends Phaser.Scene {
                         break;
                 }
                 
-                //this.spawnDefender(this.obstacleSpeed, this.obstacleSpeedMultiplier);
             }
 
             //score display
@@ -154,24 +150,7 @@ class Play extends Phaser.Scene {
         }
 
         if (this.gameOver) {
-            //game over display
-            let gameoverConfig = {
-                fontFamily: 'Stencil Std, fantasy',
-                fontSize: '100px',
-                color: '#FFFFFF',
-                align: 'right',
-                padding: {
-                    top: 5,
-                    bottom: 5,
-                },
-            }
-
-            this.gameoverScreen = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'gg').setOrigin(0, 0);
-            this.add.text(game.config.width / 2, game.config.height / 6, 'GAME OVER', gameoverConfig).setOrigin(0.5);
-            gameoverConfig.fontSize = '80px';
-            this.add.text(game.config.width / 2, game.config.height / 2, 'SCORE: ' + this.p1Score + ' YARDS', gameoverConfig).setOrigin(0.5);
-            gameoverConfig.fontSize = '45px';
-            this.add.text(game.config.width / 2, game.config.height - 100, 'Press (R) to Restart', gameoverConfig).setOrigin(0.5);
+            
         }
 
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
@@ -206,10 +185,34 @@ class Play extends Phaser.Scene {
 
     setGameOver() {
         this.sound.play('oof');
+        this.player.stop();
         this.gameOver = true;
-        // destroy the player to prevent repeated calls to this function
-        this.player.destroy();
+
+        this.player.disableBody();
+        this.physics.world.disable(this.obstacles);
         console.log('game over');
+        // show game over stuff after a couple seconds
+        this.time.delayedCall(2000, () => {
+            //game over display
+            let gameoverConfig = {
+                fontFamily: 'Stencil Std, fantasy',
+                fontSize: '100px',
+                color: '#FFFFFF',
+                align: 'right',
+                padding: {
+                    top: 5,
+                    bottom: 5,
+                },
+            }
+
+            this.gameoverScreen = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'gg').setOrigin(0, 0);
+            this.add.text(game.config.width / 2, game.config.height / 6, 'GAME OVER', gameoverConfig).setOrigin(0.5);
+            gameoverConfig.fontSize = '80px';
+            this.add.text(game.config.width / 2, game.config.height / 2, 'SCORE: ' + this.p1Score + ' YARDS', gameoverConfig).setOrigin(0.5);
+            gameoverConfig.fontSize = '45px';
+            this.add.text(game.config.width / 2, game.config.height - 100, 'Press (R) to Restart', gameoverConfig).setOrigin(0.5);
+            this.sound.play('down');
+        });
     }
 
 
