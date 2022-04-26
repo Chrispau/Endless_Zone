@@ -1,3 +1,5 @@
+let highScore = 0;
+let tries = 0;
 class Play extends Phaser.Scene {
     constructor() {
         super("play");
@@ -25,6 +27,11 @@ class Play extends Phaser.Scene {
 
         // create simple cursor input
         cursors = this.input.keyboard.createCursorKeys();
+        //WASD KEYS
+        keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         // extra key for debug stuff TODO: REMOVE/DISABLE BEFORE FINAL SUBMISSION
         keyJ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -131,14 +138,14 @@ class Play extends Phaser.Scene {
             this.scoreLeft.text = 'SCORE: ' + this.p1Score + " YARDS";
 
             // polling controls
-            if (cursors.left.isDown) {
+            if (cursors.left.isDown || keyA.isDown) {
                 this.player.setVelocityX(-this.PLAYER_VELOCITY);
-            } else if (cursors.right.isDown) {
+            } else if (cursors.right.isDown || keyD.isDown) {
                 this.player.setVelocityX(this.PLAYER_VELOCITY);
             }
-            if (cursors.up.isDown) {
+            if (cursors.up.isDown || keyW.isDown) {
                 this.player.setVelocityY(-this.PLAYER_VELOCITY);
-            } else if (cursors.down.isDown) {
+            } else if (cursors.down.isDown || keyS.isDown) {
                 this.player.setVelocityY(this.PLAYER_VELOCITY);
             }
 
@@ -207,10 +214,18 @@ class Play extends Phaser.Scene {
 
             this.gameoverScreen = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'gg').setOrigin(0, 0);
             this.add.text(game.config.width / 2, game.config.height / 6, 'GAME OVER', gameoverConfig).setOrigin(0.5);
-            gameoverConfig.fontSize = '80px';
+            gameoverConfig.fontSize = '50px';
+            tries += 1;
+            this.add.text(game.config.width / 2, game.config.height / 2 - 100 , 'Total tries: ' + tries, gameoverConfig).setOrigin(0.5);
+            gameoverConfig.fontSize = '70px';
             this.add.text(game.config.width / 2, game.config.height / 2, 'SCORE: ' + this.p1Score + ' YARDS', gameoverConfig).setOrigin(0.5);
+            if (this.p1Score > highScore) {
+                highScore = this.p1Score;
+            }
+            gameoverConfig.fontSize = '50px';
+            this.add.text(game.config.width / 2, game.config.height / 2 + 100 , 'HIGH SCORE: ' + highScore + ' YARDS', gameoverConfig).setOrigin(0.5);
             gameoverConfig.fontSize = '45px';
-            this.add.text(game.config.width / 2, game.config.height - 100, 'Press (R) to Restart', gameoverConfig).setOrigin(0.5);
+            this.add.text(game.config.width / 2, game.config.height - 75, 'Press (R) to Restart', gameoverConfig).setOrigin(0.5);
             this.sound.play('down');
         });
     }

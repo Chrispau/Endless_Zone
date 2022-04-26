@@ -23,10 +23,10 @@ class Menu extends Phaser.Scene {
         // show menu text
         this.add.text(game.config.width/2, game.config.height/2 - 200, 'ENDLESS ZONE', menuConfig).setOrigin(0.5);
         menuConfig.fontFamily = 'Gill Sans, sans-serif';
-        menuConfig.fontSize = '42px';
+        menuConfig.fontSize = '36px';
         menuConfig.backgroundColor = '#013220';
         menuConfig.color = '#FFFFFF';
-        this.add.text(game.config.width/2, game.config.height/2, 'Use arrow keys to move', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2, 'Use arrow keys or WASD to move', menuConfig).setOrigin(0.5);
         menuConfig.fontSize = '48px';
         menuConfig.color = '#FFFFFF';
         this.add.text(game.config.width/2, game.config.height/2 + 200, 'Press SPACEBAR to start', menuConfig).setOrigin(0.5);
