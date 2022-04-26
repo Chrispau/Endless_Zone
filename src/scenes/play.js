@@ -150,7 +150,7 @@ class Play extends Phaser.Scene {
             }
 
             if (Phaser.Input.Keyboard.JustDown(keyJ)) {
-                this.spawnDefender(this.obstacleSpeedMultiplier);
+                this.spawnTrash();
             }
 
 
@@ -185,8 +185,10 @@ class Play extends Phaser.Scene {
     }
 
     spawnTrash() {
-        // trash will spawn at the top at the player's x position
+        // trash will spawn at the top near the player's x position
         let startingX = randomRange(this.player.x - (game.config.width / 5), this.player.x + (game.config.width / 5));
+        // limit x position to within game bounds
+        startingX = Math.min(Math.max(startingX, game.config.width * (1 / 15)), game.config.width - game.config.width * (1 / 15));
         this.obstacles.add(new Trash(this, startingX, 0, 'trash', 0), true);
     }
 
