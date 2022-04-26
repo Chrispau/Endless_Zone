@@ -77,7 +77,7 @@ class Play extends Phaser.Scene {
         // wavse dont do anything yet
         this.wave = 0;
         this.obstacleSpeed = 300;    // defenders start at 300
-        this.obstacleSpeedMultiplier = 1;     
+        this.obstacleSpeedMultiplier = 1;
         this.nextWaveThreshold = 100; // starting at 100 yards
         this.obstacleSpawnDelay = 4000; // initial time between obstacles appearing in ms
         this.obstacleSpawnTimer = this.obstacleSpawnDelay;
@@ -147,7 +147,7 @@ class Play extends Phaser.Scene {
             }
 
             if (Phaser.Input.Keyboard.JustDown(keyJ)) {
-                // this.spawnDefender(this.obstacleSpeedMultiplier);
+                this.spawnDefender(this.obstacleSpeedMultiplier);
             }
 
 
