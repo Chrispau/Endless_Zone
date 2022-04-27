@@ -83,7 +83,7 @@ class Play extends Phaser.Scene {
         this.wave = 0;
         this.obstacleSpeed = 300;    // defenders start at 300
         this.obstacleSpeedMultiplier = 1;
-        this.nextWaveThreshold = 50; // starting at 100 yards
+        this.nextWaveThreshold = 50; // starting at 50 yards
         this.obstacleSpawnDelay = 4000; // initial time between obstacles appearing in ms
         this.obstacleSpawnTimer = this.obstacleSpawnDelay;
         this.sound.play('startup');
@@ -107,12 +107,13 @@ class Play extends Phaser.Scene {
                 this.nextWaveThreshold += 50;
                 //console.log(this.nextWaveThreshold);
                 
+                this.obstacleSpawnDelay *= 0.975;
                 // increase speed up to 600 (10y/s), at first, then start increasing obstacle spawning rate
                 if(this.scrollSpeed < 600){
                     this.obstacleSpeedMultiplier += 0.05
                     this.scrollSpeed += 50
                 } else {
-                    this.obstacleSpawnDelay *= 0.975;
+                    
                 }
                 
                 console.log(this.scrollSpeed);
