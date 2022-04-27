@@ -12,6 +12,7 @@ class Play extends Phaser.Scene {
         this.load.image('defender', 'assets/defender.png');
         this.load.image('fans', 'assets/fans.png');
         this.load.image('trash', 'assets/trash.png');
+        this.load.image('sky', 'assets/sky.png');
 
         this.load.audio('startup', 'assets/up.mp3');
         this.load.audio('oof', 'assets/oof.mp3');
@@ -21,7 +22,7 @@ class Play extends Phaser.Scene {
     create() {
         this.scrollingField = this.add.tileSprite(0, 0, 0, 0, 'field')
             .setOrigin(0, 0);
-            
+        this.sky = this.add.tileSprite(0,0,0,0, 'sky').setOrigin(0,0);
         this.PLAYER_VELOCITY = game.config.height / 2
         this.scrollSpeed = game.config.height / 2;
 
