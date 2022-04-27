@@ -199,7 +199,7 @@ class Play extends Phaser.Scene {
         let startingX = randomRange(this.player.x - (game.config.width / 5), this.player.x + (game.config.width / 5));
         // limit x position to within game bounds
         startingX = Math.min(Math.max(startingX, game.config.width * (1 / 15)), game.config.width - game.config.width * (1 / 15));
-        this.obstacles.add(new Trash(this, startingX, 0, 'trash', 0), true);
+        this.obstacles.add(new Trash(this, startingX, 75, 'trash', 0), true);
     }
 
     setGameOver() {
