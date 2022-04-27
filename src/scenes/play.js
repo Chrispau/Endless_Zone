@@ -188,8 +188,8 @@ class Play extends Phaser.Scene {
 
     spawnFans(multiplier) {
         let [startingX, direction] = randomSide();
-        let startingY = randomRange(- (game.config.height / 5), game.config.height / 5);
-        this.obstacles.add(new Fans(this, startingX, 0, 'fans', 0, this.obstacleSpeed * direction, multiplier), true);
+        let startingY = randomRange((game.config.height / 5), game.config.height * (4 / 5));
+        this.obstacles.add(new Fans(this, startingX, startingY, 'fans', 0, this.obstacleSpeed * direction, multiplier), true);
     }
 
     spawnTrash() {
