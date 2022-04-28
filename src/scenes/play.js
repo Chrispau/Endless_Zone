@@ -77,6 +77,7 @@ class Play extends Phaser.Scene {
         }
         this.p1Score = 0;
         this.scoreLeft = this.add.text(0, 0, 'SCORE: ' + this.p1Score, scoreConfig);
+        this.scoreLeft.setDepth(1)
 
 
         // scale difficulty through multiple waves based on distance traveled
@@ -210,6 +211,8 @@ class Play extends Phaser.Scene {
         this.player.disableBody();
         this.physics.world.disable(this.obstacles);
         console.log('game over');
+        tries += 1;
+        
         // show game over stuff after a couple seconds
         this.time.delayedCall(2000, () => {
             //game over display
@@ -224,25 +227,38 @@ class Play extends Phaser.Scene {
                 },
             }
 
-            this.gameoverScreen = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'gg').setOrigin(0, 0);
-            this.add.text(game.config.width / 2, game.config.height / 6, 'GAME OVER', gameoverConfig).setOrigin(0.5);
-            gameoverConfig.fontSize = '50px';
-            tries += 1;
-            this.add.text(game.config.width / 2, game.config.height / 2 - 100 , 'Total tries: ' + tries, gameoverConfig).setOrigin(0.5);
+            this.gameoverScreen = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'gg')
+                .setOrigin(0, 0)
+                .setDepth(1);
+            this.add.text(game.config.width / 2, game.config.height / 6, 'GAME OVER', gameoverConfig)
+                .setOrigin(0.5)
+                .setDepth(1);
             gameoverConfig.fontSize = '70px';
-            this.add.text(game.config.width / 2, game.config.height / 2, 'SCORE: ' + this.p1Score + ' YARDS', gameoverConfig).setOrigin(0.5);
+            this.add.text(game.config.width / 2, game.config.height / 2 - 75, 'SCORE: ' + this.p1Score + ' YARDS', gameoverConfig)
+                .setOrigin(0.5)
+                .setDepth(1);
+
+            gameoverConfig.fontSize = '50px';
             if (this.p1Score > highScore) {
                 highScore = this.p1Score;
+                gameoverConfig.color = '#00FF00';
             }
-            gameoverConfig.fontSize = '50px';
-            this.add.text(game.config.width / 2, game.config.height / 2 + 100 , 'HIGH SCORE: ' + highScore + ' YARDS', gameoverConfig).setOrigin(0.5);
+            this.add.text(game.config.width / 2, game.config.height / 2, 'HIGH SCORE: ' + highScore + ' YARDS', gameoverConfig)
+                .setOrigin(0.5)
+                .setDepth(1);
+            
+            gameoverConfig.color = '#FFFFFF'
+            this.add.text(game.config.width / 2, game.config.height / 2 + 100, 'TOTAL RUNS: ' + tries, gameoverConfig)   
+                .setOrigin(0.5)
+                .setDepth(1);
             gameoverConfig.fontSize = '45px';
-            this.add.text(game.config.width / 2, game.config.height - 75, 'Press (R) to Restart', gameoverConfig).setOrigin(0.5);
+            this.add.text(game.config.width / 2, game.config.height - 75, 'Press (R) to Restart', gameoverConfig)
+                .setOrigin(0.5)
+                .setDepth(1);
+
             this.sound.play('down');
         });
     }
-
-
 }
 
 // return the data needed to place and orient an obstacle on one side of the screen or the other
