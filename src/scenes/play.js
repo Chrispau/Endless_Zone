@@ -150,17 +150,24 @@ class Play extends Phaser.Scene {
             this.scoreLeft.text = 'SCORE: ' + this.p1Score + " YARDS";
 
             // polling controls
+            let playerMoveX = 0;
+            let playerMoveY = 0;
             if (cursors.left.isDown || keyA.isDown) {
-                this.player.setVelocityX(-this.PLAYER_VELOCITY);
-            } else if (cursors.right.isDown || keyD.isDown) {
-                this.player.setVelocityX(this.PLAYER_VELOCITY);
+                playerMoveX -= 1;
+            }
+            if (cursors.right.isDown || keyD.isDown) {
+                playerMoveX += 1;
             }
             if (cursors.up.isDown || keyW.isDown) {
-                this.player.setVelocityY(-this.PLAYER_VELOCITY);
-            } else if (cursors.down.isDown || keyS.isDown) {
-                this.player.setVelocityY(this.PLAYER_VELOCITY);
+                playerMoveY -= 1;
+            } 
+            if (cursors.down.isDown || keyS.isDown) {
+                playerMoveY += 1;
             }
 
+            this.player.setVelocityX(playerMoveX * this.PLAYER_VELOCITY);
+            this.player.setVelocityY(playerMoveY * this.PLAYER_VELOCITY)
+            // debug key
             if (Phaser.Input.Keyboard.JustDown(keyJ)) {
                 this.spawnTrash();
             }
