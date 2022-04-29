@@ -40,7 +40,8 @@ class Play extends Phaser.Scene {
         // physics sprite
         this.player = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'runner')
             .setOrigin(0.5, 1)
-            .setScale(game.config.width / 800, game.config.height / 800);
+            .setScale(game.config.width / 800, game.config.height / 800)
+            .setDepth(0.5);
         // scale sprite such that it is always the same relative to screen size
         this.player.displayWidth = game.config.width / 10;
         this.player.displayHeight = game.config.height / 5;
@@ -207,11 +208,21 @@ class Play extends Phaser.Scene {
         this.sound.play('oof');
         this.player.stop();
         this.gameOver = true;
-
         this.player.disableBody();
-        this.physics.world.disable(this.obstacles);
-        console.log('game over');
+        //console.log('game over');
         tries += 1;
+        let highScoreColor = '#FFFFFF'
+            
+            if (this.p1Score > highScore) {
+                highScore = this.p1Score;
+                highScoreColor = '#00FF00';
+            }
+
+        // delay this part just a bit to make it look like the sprites actually collide
+        this.time.delayedCall(50, () => {
+            this.physics.world.disable(this.obstacles);   
+        })
+        
         
         // show game over stuff after a couple seconds
         this.time.delayedCall(2000, () => {
@@ -239,10 +250,7 @@ class Play extends Phaser.Scene {
                 .setDepth(1);
 
             gameoverConfig.fontSize = '50px';
-            if (this.p1Score > highScore) {
-                highScore = this.p1Score;
-                gameoverConfig.color = '#00FF00';
-            }
+            gameoverConfig.color = highScoreColor;
             this.add.text(game.config.width / 2, game.config.height / 2, 'HIGH SCORE: ' + highScore + ' YARDS', gameoverConfig)
                 .setOrigin(0.5)
                 .setDepth(1);
