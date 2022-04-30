@@ -5,6 +5,7 @@ class Menu extends Phaser.Scene {
 
     preload() {
         this.load.image('graphic', 'assets/title_img.png');
+        this.load.audio('menu', './assets/menu.wav');
     }
 
     create() {
@@ -41,6 +42,10 @@ class Menu extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
         //WASD KEYS
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        //loop menu music
+        this.menuMusic = this.sound.add('menu');
+        this.menuMusic.setLoop(true);
+        this.menuMusic.play();
     }
 
     update() {

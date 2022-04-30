@@ -15,7 +15,7 @@ could be used directly to add an obstacle to the scene.
 
 
 let cursors;
-let keyUP, keyJ, keySPACE, keyW, keyA, keyS, keyD;
+let keyUP, keyJ, keySPACE, keyW, keyA, keyS, keyD, keyR;
 
 const config = {
     type: Phaser.CANVAS,
