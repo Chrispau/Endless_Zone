@@ -163,6 +163,7 @@ class Play extends Phaser.Scene {
 
     // put a defender on the screen with given horizontal speed coming from a random side of the screen
     spawnDefender(multiplier) {
+        let [startingX, direction] = randomSide();
         let startingY = randomRange(- (game.config.height / 5), game.config.height / 5);
         //second arg must be true to add object to display list i guess
         this.obstacles.add(new Defender(this, startingX, startingY, 'defender', 0, this.obstacleSpeed * direction, multiplier), true); 
