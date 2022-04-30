@@ -16,7 +16,8 @@ class Play extends Phaser.Scene {
 
         this.load.audio('startup', 'assets/up.mp3');
         this.load.audio('oof', 'assets/oof.mp3');
-        this.load.audio('down', 'assets/down.mp3')
+        this.load.audio('down', 'assets/down.mp3');
+        this.load.audio('theme A', 'assets/A.mp3');
     }
 
     create() {
@@ -85,7 +86,14 @@ class Play extends Phaser.Scene {
         this.nextWaveThreshold = 50; // starting at 50 yards
         this.obstacleSpawnDelay = 4000; // initial time between obstacles appearing in ms
         this.obstacleSpawnTimer = this.obstacleSpawnDelay;
+
+        //startup sounds
+        this.bgm = this.sound.add('theme A');
+        this.bgm.setLoop(true);
+
         this.sound.play('startup');
+        this.time.delayedCall(1000, () => {
+            this.bgm.play();})
     }
 
 
@@ -184,6 +192,7 @@ class Play extends Phaser.Scene {
     }
 
     setGameOver() {
+        this.bgm.stop();
         this.sound.play('oof');
         this.player.stop();
         this.gameOver = true;
