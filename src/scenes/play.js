@@ -38,7 +38,7 @@ class Play extends Phaser.Scene {
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
         // physics sprite
-        this.player = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'runner')
+        this.player = this.physics.add.sprite(game.config.width / 2, game.config.height - 100, 'runner')
             .setOrigin(0.5, 1)
             .setScale(game.config.width / 800, game.config.height / 800)
             .setDepth(0.5);
@@ -171,12 +171,6 @@ class Play extends Phaser.Scene {
             if (Phaser.Input.Keyboard.JustDown(keyJ)) {
                 this.spawnTrash();
             }
-
-
-        }
-
-        if (this.gameOver) {
-            
         }
 
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
