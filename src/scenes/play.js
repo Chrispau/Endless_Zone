@@ -33,8 +33,6 @@ class Play extends Phaser.Scene {
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-        // extra key for debug stuff TODO: REMOVE/DISABLE BEFORE FINAL SUBMISSION
-        keyJ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
         // physics sprite
@@ -82,8 +80,6 @@ class Play extends Phaser.Scene {
 
 
         // scale difficulty through multiple waves based on distance traveled
-        // wavse dont do anything yet
-        this.wave = 0;
         this.obstacleSpeed = 300;    // defenders start at 300
         this.obstacleSpeedMultiplier = 1;
         this.nextWaveThreshold = 50; // starting at 50 yards
@@ -106,23 +102,14 @@ class Play extends Phaser.Scene {
 
             // increasing challenge
             if (this.centerDistance > this.nextWaveThreshold) {
-                this.wave++
+                // obstacles appear a little more frequently and move a little faster
                 this.nextWaveThreshold += 50;
-                //console.log(this.nextWaveThreshold);
-                
                 this.obstacleSpawnDelay *= 0.975;
                 // increase speed up to 600 (10y/s), at first, then start increasing obstacle spawning rate
                 if(this.scrollSpeed < 600){
                     this.obstacleSpeedMultiplier += 0.05
                     this.scrollSpeed += 50
-                } else {
-                    
                 }
-                
-                console.log(this.scrollSpeed);
-                //console.log(this.obstacleSpeedMultiplier);
-                // obstacles appear a little more frequently and move a little faster
-
             }
 
             //obstacle spawning
@@ -142,7 +129,6 @@ class Play extends Phaser.Scene {
                     default:
                         break;
                 }
-                
             }
 
             //score display
@@ -167,10 +153,6 @@ class Play extends Phaser.Scene {
 
             this.player.setVelocityX(playerMoveX * this.PLAYER_VELOCITY);
             this.player.setVelocityY(playerMoveY * this.PLAYER_VELOCITY)
-            // debug key
-            if (Phaser.Input.Keyboard.JustDown(keyJ)) {
-                this.spawnTrash();
-            }
         }
 
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
@@ -181,11 +163,6 @@ class Play extends Phaser.Scene {
 
     // put a defender on the screen with given horizontal speed coming from a random side of the screen
     spawnDefender(multiplier) {
-        let [startingX, direction] = randomSide();
-        // math to find the right starting y to actually target the player -- does not work right now
-        //let v = Math.sqrt(Math.pow(this.scrollSpeed * multiplier, 2) + Math.pow(this.obstacleSpeed * multiplier, 2))
-        // let b = Math.sqrt(Math.pow(this.player.x, 2) - Math.pow(v, 2))
-        //let startingY = this.player.y - b
         let startingY = randomRange(- (game.config.height / 5), game.config.height / 5);
         //second arg must be true to add object to display list i guess
         this.obstacles.add(new Defender(this, startingX, startingY, 'defender', 0, this.obstacleSpeed * direction, multiplier), true); 
@@ -271,7 +248,7 @@ class Play extends Phaser.Scene {
 }
 
 // return the data needed to place and orient an obstacle on one side of the screen or the other
-function randomSide(){
+function randomSide() {
     if (Math.random() >= 0.5) {
         return [-10, 1];
     } else {
@@ -286,6 +263,6 @@ function randomRange(min, max) {
     return val + min;
 }
 
-function randomInt(max){
+function randomInt(max) {
     return Math.floor(Math.random() * max)
 }
