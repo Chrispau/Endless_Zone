@@ -6,6 +6,7 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
+        // art by Nic
         this.load.image('field', 'assets/field600.png');
         this.load.image('gg', 'assets/gameover.png');
         this.load.image('runner', 'assets/player_sprite.png');
@@ -14,6 +15,7 @@ class Play extends Phaser.Scene {
         this.load.image('trash', 'assets/trash.png');
         this.load.image('sky', 'assets/sky.png');
 
+        // sounds by Chris
         this.load.audio('startup', 'assets/up.mp3');
         this.load.audio('oof', 'assets/oof.mp3');
         this.load.audio('down', 'assets/down.mp3')
