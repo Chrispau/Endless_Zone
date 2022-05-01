@@ -11,7 +11,7 @@ class Play extends Phaser.Scene {
         this.load.image('gg', 'assets/gameover.png');
         this.load.image('runner', 'assets/player_sprite.png');
         this.load.image('defender', 'assets/defender.png');
-        this.load.image('fans', 'assets/fans.png');
+        this.load.image('fans', 'assets/fansV1.png');
         this.load.image('trash', 'assets/trash.png');
         this.load.image('sky', 'assets/sky.png');
 
