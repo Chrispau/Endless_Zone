@@ -9,7 +9,7 @@ class Play extends Phaser.Scene {
         // art by Nic
         this.load.image('field', 'assets/fieldV3.png');
         this.load.image('gg', 'assets/gameover.png');
-        this.load.image('runner', 'assets/player_spriteV2.png', {
+        this.load.spritesheet('runner', 'assets/player_spriteV2.png', {
             frameWidth: 49,
             frameHeight: 77,
         });
@@ -49,16 +49,20 @@ class Play extends Phaser.Scene {
         // scale sprite such that it is always the same relative to screen size
         this.player.displayWidth = game.config.width / 10;
         this.player.displayHeight = game.config.height / 5;
-
         this.player.setCollideWorldBounds(true);
+
+        // running animation
+        this.anims.create({
+            key: 'run',
+            frames: this.anims.generateFrameNumbers('runner', {start: 0, end: 1, first: 0}),
+            frameRate: 10,
+            repeat: -1
+        });
 
         this.centerDistance = 0;
         this.obstacles = this.physics.add.group({
             runChildUpdate: true
         });
-
-        //this.physics.add.collider(this.player, this.defenders);
-
         this.physics.add.overlap(this.player, this.obstacles, this.setGameOver, null, this);
 
         //set game over initially to false
@@ -96,6 +100,7 @@ class Play extends Phaser.Scene {
         this.bgm = this.sound.add('theme A');
         this.bgm.setLoop(true);
 
+        this.player.anims.play('run');
         this.sound.play('startup');
         this.time.delayedCall(1000, () => {
             this.bgm.play();})
