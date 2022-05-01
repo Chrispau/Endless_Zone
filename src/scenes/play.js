@@ -19,7 +19,7 @@ class Play extends Phaser.Scene {
         this.load.audio('startup', 'assets/up.mp3');
         this.load.audio('oof', 'assets/oof.mp3');
         this.load.audio('down', 'assets/down.mp3');
-        this.load.audio('theme A', 'assets/A.mp3');
+        this.load.audio('theme A', 'assets/A Theme.mp3');
     }
 
     create() {
