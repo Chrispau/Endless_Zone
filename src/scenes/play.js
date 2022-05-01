@@ -9,7 +9,10 @@ class Play extends Phaser.Scene {
         // art by Nic
         this.load.image('field', 'assets/fieldV3.png');
         this.load.image('gg', 'assets/gameover.png');
-        this.load.image('runner', 'assets/player_sprite.png');
+        this.load.image('runner', 'assets/player_spriteV2.png', {
+            frameWidth: 49,
+            frameHeight: 77,
+        });
         this.load.image('defender', 'assets/defender.png');
         this.load.image('fans', 'assets/fansV1.png');
         this.load.image('trash', 'assets/trash.png');
